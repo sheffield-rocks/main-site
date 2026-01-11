@@ -95,7 +95,7 @@ export default function Home() {
       
       <div className="z-10 text-center px-4">
         <motion.h1 
-          className="text-6xl md:text-8xl font-bold text-white drop-shadow-lg mb-6 tracking-tight"
+          className="text-6xl md:text-8xl text-white drop-shadow-lg mb-6 tracking-tight"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}

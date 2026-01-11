@@ -50,9 +50,9 @@ export const Sky = ({ preset }: { preset: SkyPreset }) => {
             {preset === 'day' && (
                 <motion.div key="day-elements" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
                     <Sun className="top-10 right-20" />
-                    <Cloud className="top-20" delay={0} duration={45} scale={1.2} />
+                    {/* <Cloud className="top-20" delay={0} duration={45} scale={1.2} />
                     <Cloud className="top-40" delay={20} duration={55} opacity={0.6} />
-                    <Cloud className="top-10" delay={10} duration={60} scale={0.8} />
+                    <Cloud className="top-10" delay={10} duration={60} scale={0.8} /> */}
                 </motion.div>
             )}
 
@@ -62,7 +62,7 @@ export const Sky = ({ preset }: { preset: SkyPreset }) => {
                     {stars.slice(0, 10).map(star => (
                         <Star key={star.id} {...star} />
                     ))}
-                    <Cloud className="top-20 text-orange-100" delay={0} duration={50} opacity={0.5} />
+                    {/* <Cloud className="top-20 text-orange-100" delay={0} duration={50} opacity={0.5} /> */}
                 </motion.div>
             )}
 
@@ -72,7 +72,7 @@ export const Sky = ({ preset }: { preset: SkyPreset }) => {
                     {stars.map(star => (
                         <Star key={star.id} {...star} />
                     ))}
-                    <Cloud className="top-32 text-indigo-900" delay={0} duration={80} opacity={0.2} />
+                    {/* <Cloud className="top-32 text-indigo-900" delay={0} duration={80} opacity={0.2} /> */}
                 </motion.div>
             )}
 
