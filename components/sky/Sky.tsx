@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Cloud, Star } from './elements';
+import { Sun, Moon, Cloud, Star, Rain, CirrusCloud } from './elements';
 import { SkyPreset } from './types';
 import { useEffect, useState } from 'react';
 
@@ -10,6 +10,8 @@ const gradients: Record<SkyPreset, string> = {
   dusk: 'linear-gradient(to bottom, #4c1d95, #f97316)', // violet-900 to orange-500
   night: 'linear-gradient(to bottom, #020617, #172554)', // slate-950 to blue-950
   overcast: 'linear-gradient(to bottom, #64748b, #cbd5e1)', // slate-500 to slate-300
+  rainy: 'linear-gradient(to bottom, #64748b, #cbd5e1)', // slate-500 to slate-300
+  heavyrainy: 'linear-gradient(to bottom, #334155, #64748b)', // slate-700 to slate-500
 };
 
 type StarData = {
@@ -83,6 +85,18 @@ export const Sky = ({ preset }: { preset: SkyPreset }) => {
                     <Cloud className="top-5 text-slate-100" delay={15} duration={40} scale={0.9} opacity={0.7} />
                     <Cloud className="top-60 text-slate-400" delay={2} duration={25} scale={1.8} opacity={0.4} />
                     <Cloud className="top-20 text-slate-200" delay={20} duration={38} scale={1.1} />
+                </motion.div>
+            )}
+
+            {(preset === 'rainy' || preset === 'heavyrainy') && (
+                <motion.div key="rainy-elements" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 1 }} transition={{ duration: 1 }}>
+                    <Rain count={preset === 'rainy' ? 150 : 300} />
+                    {/* Darker, thicker clouds for rain using the new realistic style */}
+                    <div className="absolute inset-0 opacity-50 mix-blend-overlay">
+                        <CirrusCloud top="-10%" left="0%" scale={2} duration={120} opacity={0.4} />
+                        <CirrusCloud top="20%" left="20%" scale={1.5} duration={100} opacity={0.3} />
+                        <CirrusCloud top="40%" left="-10%" scale={1.8} duration={140} opacity={0.3} />
+                    </div>
                 </motion.div>
             )}
         </AnimatePresence>

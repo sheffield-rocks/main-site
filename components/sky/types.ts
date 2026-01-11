@@ -1,1 +1,1 @@
-export type SkyPreset = 'day' | 'dusk' | 'night' | 'overcast';
+export type SkyPreset = 'day' | 'dusk' | 'night' | 'overcast' | 'rainy' | 'heavyrainy';

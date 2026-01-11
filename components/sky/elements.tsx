@@ -106,3 +106,75 @@ export const Star = ({
         />
     );
 };
+
+export const Rain = ({ count = 100 }: { count?: number }) => {
+    // Generate rain drops with randomized properties
+    const drops = Array.from({ length: count }).map((_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        delay: Math.random() * 2,
+        duration: 0.5 + Math.random() * 0.5
+    }));
+
+    return (
+        <div className="absolute inset-0 pointer-events-none z-0">
+            {drops.map(drop => (
+                <motion.div
+                    key={drop.id}
+                    className="absolute top-0 w-[1px] h-24 bg-gradient-to-b from-transparent to-blue-200/50"
+                    style={{ left: drop.left }}
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: '100vh', opacity: [0, 1, 0] }}
+                    transition={{
+                        duration: drop.duration,
+                        repeat: Infinity,
+                        delay: drop.delay,
+                        ease: "linear"
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
+export const CirrusCloud = ({ 
+    className, 
+    top,
+    left,
+    scale = 1,
+    opacity = 0.6,
+    duration = 60
+}: { 
+    className?: string;
+    top: string;
+    left: string;
+    scale?: number;
+    opacity?: number;
+    duration?: number;
+}) => {
+    return (
+        <motion.div
+            className={cn("absolute mix-blend-screen pointer-events-none", className)}
+            style={{ 
+                top, 
+                left,
+                scale 
+            }}
+            initial={{ x: "-10%", opacity: 0 }}
+            animate={{ x: "10%", opacity }}
+            transition={{
+                duration,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+            }}
+        >
+           {/* Composite wispy cloud using multiple blurred gradients */}
+           <div className="relative w-96 h-32 filter blur-3xl opacity-80">
+                <div className="absolute top-4 left-0 w-full h-12 bg-white/20 rounded-full transform -rotate-2" />
+                <div className="absolute top-10 left-12 w-3/4 h-16 bg-white/30 rounded-full transform rotate-1" />
+                <div className="absolute top-2 left-24 w-1/2 h-10 bg-white/10 rounded-full transform -rotate-1" />
+           </div>
+        </motion.div>
+    );
+};

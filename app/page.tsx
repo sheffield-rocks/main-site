@@ -1,10 +1,7 @@
-'use client';
-
-import { useState, useEffect } from "react";
-import { Sky } from "@/components/sky/Sky";
-import { SkyPreset } from "@/components/sky/types";
-import { motion } from "framer-motion";
-import { Rocks } from "@/components/sky/Rocks";
+import { promises as fs } from 'fs';
+import path from 'path';
+import HomeClient from './HomeClient';
+import { SkyPreset } from '@/components/sky/types';
 
 // Default configuration (approximate winter times)
 const DEFAULT_SUNRISE = 8 * 60; // 08:00
@@ -36,81 +33,60 @@ const calculatePreset = (currentMinutes: number, sunriseMinutes: number, sunsetM
   }
 };
 
-export default function Home() {
-  const [preset, setPreset] = useState<SkyPreset>(() => {
-    try {
+async function getSkyConfig() {
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'sky-config.json');
+    const fileContents = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(fileContents);
+  } catch (error) {
+    console.warn('Could not read sky-config.json:', error);
+    return null;
+  }
+}
+
+export default async function Home() {
+  const config = await getSkyConfig();
+  
+  let initialPreset: SkyPreset = 'day';
+  let initialSunrise;
+  let initialSunset;
+
+  if (config) {
+    if (config.preset) {
+      initialPreset = config.preset as SkyPreset;
+    } else {
+      // Calculate based on config times
       const now = new Date();
-      const minutes = getMinutesFromDate(now);
-      return calculatePreset(minutes, DEFAULT_SUNRISE, DEFAULT_SUNSET);
-    } catch {
-      return 'day'; // Fallback
-    }
-  });
+      const currentMinutes = getMinutesFromDate(now);
+      
+      let sunriseMinutes = DEFAULT_SUNRISE;
+      let sunsetMinutes = DEFAULT_SUNSET;
 
-  useEffect(() => {
-    const updateSkyState = async () => {
-      try {
-        let sunriseMinutes = DEFAULT_SUNRISE;
-        let sunsetMinutes = DEFAULT_SUNSET;
-
-        // Fetch config
-        try {
-          const res = await fetch('/sky-config.json');
-          if (res.ok) {
-            const data = await res.json();
-            // Parse sunrise/sunset from config (e.g., "2026-01-10T08:17")
-            const parseTime = (isoString: string) => {
-              const date = new Date(isoString);
-              return date.getHours() * 60 + date.getMinutes();
-            };
-            
-            if (data.sunrise && data.sunset) {
-              sunriseMinutes = parseTime(data.sunrise);
-              sunsetMinutes = parseTime(data.sunset);
-            }
-          }
-        } catch (e) {
-          console.error('Failed to load sky config', e);
-        }
-
-        const now = new Date();
-        const currentMinutes = getMinutesFromDate(now);
-        setPreset(calculatePreset(currentMinutes, sunriseMinutes, sunsetMinutes));
-      } catch (error) {
-        console.error('Error calculating sky state:', error);
+      if (config.sunrise && config.sunset) {
+        const parseTime = (isoString: string) => {
+            const date = new Date(isoString);
+            return date.getHours() * 60 + date.getMinutes();
+        };
+        sunriseMinutes = parseTime(config.sunrise);
+        sunsetMinutes = parseTime(config.sunset);
       }
-    };
-
-    updateSkyState();
-    
-    // Update every minute
-    const interval = setInterval(updateSkyState, 60000);
-    return () => clearInterval(interval);
-  }, []);
+      
+      initialPreset = calculatePreset(currentMinutes, sunriseMinutes, sunsetMinutes);
+    }
+    initialSunrise = config.sunrise;
+    initialSunset = config.sunset;
+  } else {
+      // Fallback calculation
+      const now = new Date();
+      const currentMinutes = getMinutesFromDate(now);
+      initialPreset = calculatePreset(currentMinutes, DEFAULT_SUNRISE, DEFAULT_SUNSET);
+  }
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden font-sans">
-      <Sky preset={preset} />
-      <Rocks />
-      
-      <div className="z-10 text-center px-4">
-        <motion.h1 
-          className="text-6xl md:text-8xl text-white drop-shadow-lg mb-6 tracking-tight"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          sheffield.rocks
-        </motion.h1>
-        <motion.p 
-          className="text-xl md:text-2xl text-white/90 font-light drop-shadow-md"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          Coming this spring
-        </motion.p>
-      </div>
-    </main>
+    <HomeClient 
+      initialPreset={initialPreset} 
+      initialSunrise={initialSunrise} 
+      initialSunset={initialSunset} 
+    />
   );
 }

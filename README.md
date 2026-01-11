@@ -1,48 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sheffield.rocks 🎸
 
-## Getting Started
+A high-performance, visually immersive landing page for the future of Sheffield's digital landscape. Built with modern web technologies, featuring a dynamic environment that reflects the real-time atmosphere of the Steel City.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Dynamic Sky Engine**: A real-time atmospheric system that transitions between **Day**, **Dusk**, and **Night** based on actual sunrise and sunset times in Sheffield.
+- **Weather Integration**: Seamlessly adjusts the environment to reflect local weather conditions (Sun, Clouds, Overcast) using the Open-Meteo API.
+- **Iconic Landmarks**: Custom-crafted SVG silhouettes of Sheffield's famous skyline, including:
+  - **The Arts Tower** & **Owen Building**
+  - **St Paul's Tower**
+  - **Sheffield Town Hall** (with the iconic clock)
+  - **Park Hill Flats**
+- **Premium Aesthetics**: Smooth transitions via **Framer Motion**, glassmorphism effects, and a responsive design that feels alive.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: [Next.js 15+](https://nextjs.org) (App Router)
+- **Runtime**: [React 19](https://react.dev)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Data**: [Open-Meteo API](https://open-meteo.com/) for real-time solar and weather data.
+- **Deployment**: [GitHub Pages](https://pages.github.com) via automated [GitHub Actions](https://github.com/features/actions).
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Node.js](https://nodejs.org/) (Latest LTS)
+- [npm](https://www.npmjs.com/) or [bun](https://bun.sh/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Installation
 
-## Deploy on Vercel
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/sheffield-rocks.git
+   cd sheffield-rocks
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   bun dev
+   ```
 
-## Deployment on GitHub Pages
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project is configured to deploy to GitHub Pages using GitHub Actions.
+## 🛰 How it Works: The Sky Engine
 
-1.  **Configuration**:
-    *   `next.config.ts`: Configured with `output: "export"` for static site generation.
-    *   `next.config.ts`: Includes a `basePath` configuration reading from `process.env.BASE_PATH` to support hosting in a subdirectory (e.g., `username.github.io/repo-name`).
-    *   `.github/workflows/deploy.yml`: A workflow that builds the site with `BASE_PATH=/main-site` (matching the repository name) and deploys to the `github-pages` environment.
+The site uses a scheduled GitHub Action to fetch real-time data for Sheffield (Lat: 53.3811, Long: -1.4701).
 
-2.  **Custom Domain**:
-    *   If switching to a custom domain (e.g., `sheffield.rocks`), remove the `BASE_PATH` environment variable from `.github/workflows/deploy.yml` or set it to an empty string. The `next.config.ts` will handle the empty string correctly.
+1. **Scheduled Updates**: Every few hours, `scripts/update-sky-data.ts` runs.
+2. **Data Fetching**: It queries Open-Meteo for the current daily sunrise/sunset and weather code.
+3. **Static Config**: The results are saved to `public/sky-config.json`.
+4. **Hydration**: On page load, the client fetches this JSON to set the initial `SkyPreset`, ensuring the background always matches the mood outside.
+
+## 📦 Deployment
+
+This project is optimized for **GitHub Pages**.
+
+1. **Static Export**: Configured with `output: 'export'` in `next.config.ts`.
+2. **Automated Workflow**: Pushing to the `main` branch triggers `.github/workflows/deploy.yml`, which builds the project and deploys it.
+3. **Custom Domain**: Ready for `sheffield.rocks`. To switch from the default `.github.io` path, adjust the `BASE_PATH` in the deployment workflow.
+
+---
+
+Built with ❤️ for Sheffield.
