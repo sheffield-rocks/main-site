@@ -48,8 +48,6 @@ export default async function Home() {
   const config = await getSkyConfig();
   
   let initialPreset: SkyPreset = 'day';
-  let initialSunrise;
-  let initialSunset;
 
   if (config) {
     if (config.preset) {
@@ -73,8 +71,6 @@ export default async function Home() {
       
       initialPreset = calculatePreset(currentMinutes, sunriseMinutes, sunsetMinutes);
     }
-    initialSunrise = config.sunrise;
-    initialSunset = config.sunset;
   } else {
       // Fallback calculation
       const now = new Date();
@@ -85,8 +81,6 @@ export default async function Home() {
   return (
     <HomeClient 
       initialPreset={initialPreset} 
-      initialSunrise={initialSunrise} 
-      initialSunset={initialSunset} 
     />
   );
 }
