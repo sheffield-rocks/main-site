@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-// Serves the pre-generated static sky-config.json used by SSR.
+// Static export compatibility: make this route fully static.
+export const dynamic = "force-static";
+export const revalidate = false;
+
 export async function GET() {
   try {
     const filePath = path.join(process.cwd(), "public", "sky-config.json");
