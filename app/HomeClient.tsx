@@ -16,13 +16,13 @@ export default function HomeClient({ initialPreset }: HomeClientProps) {
   const [preset] = useState<SkyPreset>(initialPreset);
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden font-sans">
+    <main className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden font-sans px-gr-6 sm:px-gr-7">
       <Sky preset={preset} />
       <Rocks />
       
-      <div className="z-10 text-center px-4">
+      <div className="z-10 text-center max-w-[min(92vw,48rem)]">
         <motion.h1 
-          className="text-6xl md:text-8xl text-white drop-shadow-lg mb-6 tracking-tight"
+          className="text-[clamp(2.75rem,10vw,6rem)] md:text-8xl text-white drop-shadow-lg mb-6 tracking-tight leading-tight"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
