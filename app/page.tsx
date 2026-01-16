@@ -1,7 +1,6 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import HomeClient from './HomeClient';
 import { SkyPreset } from '@/components/sky/types';
+import { getSkyConfig } from '@/lib/sky-data';
 
 // Default configuration (approximate winter times)
 const DEFAULT_SUNRISE = 8 * 60; // 08:00
@@ -32,17 +31,6 @@ const calculatePreset = (currentMinutes: number, sunriseMinutes: number, sunsetM
     return 'night';
   }
 };
-
-async function getSkyConfig() {
-  try {
-    const filePath = path.join(process.cwd(), 'public', 'sky-config.json');
-    const fileContents = await fs.readFile(filePath, 'utf8');
-    return JSON.parse(fileContents);
-  } catch (error) {
-    console.warn('Could not read sky-config.json:', error);
-    return null;
-  }
-}
 
 export default async function Home() {
   const config = await getSkyConfig();

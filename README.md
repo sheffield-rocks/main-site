@@ -57,12 +57,12 @@ A high-performance, visually immersive landing page for the future of Sheffield'
 
 ## 🛰 How it Works: The Sky Engine
 
-The site uses a scheduled GitHub Action to fetch real-time data for Sheffield (Lat: 53.3811, Long: -1.4701).
+The site relies on the data repo's scheduled workflow to fetch real-time data for Sheffield (Lat: 53.3811, Long: -1.4701).
 
-1. **Scheduled Updates**: Every few hours, `scripts/update-sky-data.ts` runs.
+1. **Scheduled Updates**: The data repo runs `pipelines/sky/update-sky-data.ts`.
 2. **Data Fetching**: It queries Open-Meteo for the current daily sunrise/sunset and weather code.
-3. **Static Config**: The results are saved to `public/sky-config.json`.
-4. **Hydration**: On page load, the client fetches this JSON to set the initial `SkyPreset`, ensuring the background always matches the mood outside.
+3. **Static Config**: The results are saved to `data/sky/sky-config.json` in the data repo.
+4. **Consumption**: This app reads from the data repo via `SHEFFIELD_DATA_BASE_URL` or `SHEFFIELD_DATA_DIR` at build time to set the initial `SkyPreset`.
 
 ## 📦 Deployment
 
