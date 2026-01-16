@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt = "sheffield.rocks — Coming this spring.";
+export const dynamic = "force-static";
 
 export const size = {
   width: 1200,
