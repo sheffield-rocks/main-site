@@ -1,6 +1,6 @@
 import HomeClient from './HomeClient';
 import { SkyPreset } from '@/components/sky/types';
-import { getSkyConfig } from '@/lib/sky-data';
+import { getSkyConfig, SkyConfig } from '@/lib/sky-data';
 
 // Default configuration (approximate winter times)
 const DEFAULT_SUNRISE = 8 * 60; // 08:00
@@ -37,33 +37,36 @@ export default async function Home() {
   
   let initialPreset: SkyPreset = 'day';
 
-  if (config) {
-    if (config.preset) {
-      initialPreset = config.preset as SkyPreset;
-    } else {
-      // Calculate based on config times
-      const now = new Date();
-      const currentMinutes = getMinutesFromDate(now);
-      
-      let sunriseMinutes = DEFAULT_SUNRISE;
-      let sunsetMinutes = DEFAULT_SUNSET;
+  const parseTime = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.getHours() * 60 + date.getMinutes();
+  };
 
-      if (config.sunrise && config.sunset) {
-        const parseTime = (isoString: string) => {
-            const date = new Date(isoString);
-            return date.getHours() * 60 + date.getMinutes();
-        };
-        sunriseMinutes = parseTime(config.sunrise);
-        sunsetMinutes = parseTime(config.sunset);
-      }
-      
-      initialPreset = calculatePreset(currentMinutes, sunriseMinutes, sunsetMinutes);
+  const getPresetFromConfig = (data: SkyConfig | null): SkyPreset | null => {
+    if (!data) return null;
+    if (typeof data.preset === "string") {
+      return data.preset as SkyPreset;
     }
-  } else {
-      // Fallback calculation
+
+    if (typeof data.sunrise === "string" && typeof data.sunset === "string") {
       const now = new Date();
       const currentMinutes = getMinutesFromDate(now);
-      initialPreset = calculatePreset(currentMinutes, DEFAULT_SUNRISE, DEFAULT_SUNSET);
+      const sunriseMinutes = parseTime(data.sunrise);
+      const sunsetMinutes = parseTime(data.sunset);
+      return calculatePreset(currentMinutes, sunriseMinutes, sunsetMinutes);
+    }
+
+    return null;
+  };
+
+  const presetFromConfig = getPresetFromConfig(config);
+  if (presetFromConfig) {
+    initialPreset = presetFromConfig;
+  } else {
+    // Fallback calculation
+    const now = new Date();
+    const currentMinutes = getMinutesFromDate(now);
+    initialPreset = calculatePreset(currentMinutes, DEFAULT_SUNRISE, DEFAULT_SUNSET);
   }
 
   return (
