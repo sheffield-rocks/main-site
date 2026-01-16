@@ -57,7 +57,8 @@ A high-performance, visually immersive landing page for the future of Sheffield'
 
 ## 🛰 How it Works: The Sky Engine
 
-The site relies on the data repo's scheduled workflow to fetch real-time data for Sheffield (Lat: 53.3811, Long: -1.4701).
+The site will rely on the data repo's scheduled workflow to fetch real-time data for Sheffield (Lat: 53.3811, Long: -1.4701).
+For now, the dynamic sky is disabled and we use a static preset until a dynamic backend is live.
 
 1. **Scheduled Updates**: The data repo runs `pipelines/sky/update-sky-data.ts`.
 2. **Data Fetching**: It queries Open-Meteo for the current daily sunrise/sunset and weather code.
