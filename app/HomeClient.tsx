@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sky } from "@/components/sky/Sky";
 import { SkyPreset } from "@/components/sky/types";
 import { motion } from "framer-motion";
@@ -14,6 +14,14 @@ interface HomeClientProps {
 
 export default function HomeClient({ initialPreset }: HomeClientProps) {
   const [preset] = useState<SkyPreset>(initialPreset);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden font-sans px-gr-6 sm:px-gr-7">
